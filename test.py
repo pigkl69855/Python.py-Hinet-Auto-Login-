@@ -129,8 +129,8 @@ def userInput():
 t = threading.Thread(target=userInput)
 t.start()
 
-usernameStr = '71778634'
-passwordStr = 'gibrhaud'#密碼記得改正
+usernameStr = 'yourusername'
+passwordStr = 'yourpassword'#密碼記得改正
 situation=False 
 #HinetLoginSmoothly=True    #此語法目前沒用 可能沒進入正常網頁而崩潰
 connectSuccessCount=0  #Hinet帳密登入成功次數
