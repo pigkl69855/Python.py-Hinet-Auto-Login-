@@ -1,6 +1,6 @@
-
-# Hinet Auto Login 1.1.0  2020_2_12
-# "上次成功連線時間" , "經過時間" 新功能增加完成
+# Hinet Auto Login 1.1.20 2020_2_24  bug修正  排版整理
+# Hinet Auto Login 1.1.10 2020_2_14  bug 修正
+# Hinet Auto Login 1.1.0  2020_2_12   "上次成功連線時間" , "經過時間" 新功能增加完成
 
 
 
@@ -41,14 +41,6 @@ import threading
 
 #設計斷線連線成功 計次紀錄  
 
-resetNetWork=False
-
-localtime = time.localtime(time.time())
-TemporaryHour = localtime.tm_hour
-TemporaryMin = localtime.tm_min
-timePassCounter=0
-# int ( timePassCounter ) 
-
 #可能會造成雙網卡連線錯誤   {問題待發現}
 #可試的方法 block wifi     {問題待發現}
 def connect_wifi():
@@ -70,10 +62,7 @@ def check_ping():
     else:
         pingstatus = "@@@@@@@@@@@@@@@@@@@@@deBug---Network Error"
         print(pingstatus)
-        global timePassCounter
-        timePassCounter=0
         return False
-
 def delayCount():
     x=0
     while x != 600 :  # 原本為 600 測試 請改成 7
@@ -84,13 +73,16 @@ def delayCount():
         global TemporaryMin
         localtime = time.localtime(time.time())
         timePassCounter+=1
+        global mathMin
+        global mathHour
         mathMin=timePassCounter/60
         mathHour=mathMin/60
+        mathMin=mathMin%60
 
         if TemporaryHour > 12:
             # TemporaryHour -= 12
             print("deBug---delay秒數: ", x, "       成功重新連線次數", connectSuccessCount, "          等待10分鐘次數", ccount,
-                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour-12, ":", TemporaryMin, "pm","  經過時間 ",int(mathHour),":",int(mathMin))
+                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour-12, ":",TemporaryMin, "pm","  經過時間 ",int(mathHour),":",int(mathMin))
 
         else:
             print("deBug---delay秒數: ", x, "       成功重新連線次數", connectSuccessCount, "          等待10分鐘次數", ccount,
@@ -101,7 +93,6 @@ def delayCount():
             print("#####################deBug---收到 RESET指令 正在執行")
             x=600
             resetNetWork=False
-
 def timeCounter():  #用來print 上次成功登入時間 與 連線經過時間
     localtime = time.localtime(time.time())
     global TemporaryHour
@@ -109,15 +100,14 @@ def timeCounter():  #用來print 上次成功登入時間 與 連線經過時間
     TemporaryHour = localtime.tm_hour
     TemporaryMin = localtime.tm_min
 
-    passHour=localtime.tm_hour-TemporaryHour
-    passMin=localtime.tm_min-TemporaryMin
+    # passHour=localtime.tm_hour-TemporaryHour
+    # passMin=localtime.tm_min-TemporaryMin
     
     if(TemporaryHour>12):
         TemporaryHour-=12
         print("上次成功連線時間為 ",TemporaryHour,":",TemporaryMin,"pm")
     else:
-        print("上次成功連線時間為 ",TemporaryHour,":",TemporaryMin,"am")            
-
+        print("上次成功連線時間為 ",TemporaryHour,":",TemporaryMin,"am")
 def userInput():
     while(True):
         ans=input()
@@ -126,19 +116,26 @@ def userInput():
             resetNetWork=True
         time.sleep(1)
 
-t = threading.Thread(target=userInput)
-t.start()
-
 usernameStr = 'usernameStr'
 passwordStr = 'passwordStr'#密碼記得改正
 situation=False 
 #HinetLoginSmoothly=True    #此語法目前沒用 可能沒進入正常網頁而崩潰
 connectSuccessCount=0  #Hinet帳密登入成功次數
 ccount=0     #等待10分鐘次數
+resetNetWork=False
+localtime = time.localtime(time.time())
+TemporaryHour = localtime.tm_hour
+TemporaryMin = localtime.tm_min
+timePassCounter=0
+mathMin=0
+mathHour=0
+# int ( timePassCounter )
+
+t = threading.Thread(target=userInput)
+t.start()
 
 print("@@@@@@@@@@@@@@@@@@@@@deBug---啟動前delay八秒 可進行遠端斷線")
 time.sleep(8)      #等候8秒
-
 while True:  #延遲10分鐘
     if check_ping()==True:
         situation=True
@@ -188,7 +185,7 @@ while True:  #延遲10分鐘
             signInButton = browser.find_element_by_css_selector("div[class=\"enterBtn\"]")#
             signInButton.click()
             print("@@@@@@@@@@@@@@@@@@@@@deBug---完成-Hinet登入")
-            timeCounter()
+            
         #else:
         #break
 
@@ -213,6 +210,8 @@ while True:  #延遲10分鐘
                 connectSuccessCount+=1
                 print("成功重新連線次數",connectSuccessCount)
                 print("@@@@@@@@@@@@@@@@@@@@@deBug---設定 bool--situation = True")
+                timePassCounter=0
+                timeCounter()
             else:
                 print("@@@@@@@@@@@@@@@@@@@@@deBug---斷網重連---else:")
                 disconnect_wifi()  #斷線網路
