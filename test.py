@@ -82,11 +82,11 @@ def delayCount():
         if TemporaryHour > 12:
             # TemporaryHour -= 12
             print("deBug---delay秒數: ", x, "       成功重新連線次數", connectSuccessCount, "          等待10分鐘次數", ccount,
-                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour-12, ":",TemporaryMin, "pm","  經過時間 ",int(mathHour),":",int(mathMin),"debug",TemporaryHour)
+                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour-12, ":",TemporaryMin, "pm","  經過時間 ",int(mathHour),":",int(mathMin))
 
         else:
             print("deBug---delay秒數: ", x, "       成功重新連線次數", connectSuccessCount, "          等待10分鐘次數", ccount,
-                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour, ":", TemporaryMin, "am","  經過時間 ",int(mathHour),":",int(mathMin),"debug",TemporaryHour)
+                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour, ":", TemporaryMin, "am","  經過時間 ",int(mathHour),":",int(mathMin))
 
         global resetNetWork
         if(resetNetWork==True):
