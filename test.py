@@ -1,4 +1,4 @@
-# Hinet Auto Login 1.1.20 2020_2_24  bug修正  排版整理
+# Hinet Auto Login 1.1.20 2020_2_14  bug修正  排版整理  1_19完成
 # Hinet Auto Login 1.1.10 2020_2_14  bug 修正
 # Hinet Auto Login 1.1.0  2020_2_12   "上次成功連線時間" , "經過時間" 新功能增加完成
 
@@ -82,11 +82,11 @@ def delayCount():
         if TemporaryHour > 12:
             # TemporaryHour -= 12
             print("deBug---delay秒數: ", x, "       成功重新連線次數", connectSuccessCount, "          等待10分鐘次數", ccount,
-                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour-12, ":",TemporaryMin, "pm","  經過時間 ",int(mathHour),":",int(mathMin))
+                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour-12, ":",TemporaryMin, "pm","  經過時間 ",int(mathHour),":",int(mathMin),"debug",TemporaryHour)
 
         else:
             print("deBug---delay秒數: ", x, "       成功重新連線次數", connectSuccessCount, "          等待10分鐘次數", ccount,
-                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour, ":", TemporaryMin, "am","  經過時間 ",int(mathHour),":",int(mathMin))
+                  "       如果斷線輸入 \"r\"重新連網","      上次成功連線時間為 ", TemporaryHour, ":", TemporaryMin, "am","  經過時間 ",int(mathHour),":",int(mathMin),"debug",TemporaryHour)
 
         global resetNetWork
         if(resetNetWork==True):
@@ -104,8 +104,8 @@ def timeCounter():  #用來print 上次成功登入時間 與 連線經過時間
     # passMin=localtime.tm_min-TemporaryMin
     
     if(TemporaryHour>12):
-        TemporaryHour-=12
-        print("上次成功連線時間為 ",TemporaryHour,":",TemporaryMin,"pm")
+        # TemporaryHour-=12
+        print("上次成功連線時間為 ",TemporaryHour-12,":",TemporaryMin,"pm")
     else:
         print("上次成功連線時間為 ",TemporaryHour,":",TemporaryMin,"am")
 def userInput():
@@ -211,6 +211,8 @@ while True:  #延遲10分鐘
                 print("成功重新連線次數",connectSuccessCount)
                 print("@@@@@@@@@@@@@@@@@@@@@deBug---設定 bool--situation = True")
                 timePassCounter=0
+                mathHour=0
+                mathMin=0
                 timeCounter()
             else:
                 print("@@@@@@@@@@@@@@@@@@@@@deBug---斷網重連---else:")
